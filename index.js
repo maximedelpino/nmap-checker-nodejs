@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const app = express();
-const nmap = require('node-nmap');
+//const nmap = require('node-nmap');
+const nmap = require('libnmap');
 nmap.nmapLocation = 'nmap'; //default
 var application_root = __dirname;
 
@@ -21,17 +22,18 @@ app.post('/checkPorts', (req, res) => {
 
     console.log(serverIP)
 
-    let quickscan = new nmap.NmapScan(serverIP);
-    
-    quickscan.on('complete', function(data){
-        console.log(data.openPorts);
+    const opts = {
+        range: [serverIP]
+      };
+      
+      
+      nmap.scan(opts, function(err, report) {
+        if (err) throw new Error(err);
+      
+        for (let item in report) {
+          console.log(JSON.stringify(report[item], null, 2));
+        }
       });
-       
-      quickscan.on('error', function(error){
-        console.log(error);
-      });
-       
-      quickscan.startScan();
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({ id: serverID }));
