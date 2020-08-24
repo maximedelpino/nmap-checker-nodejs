@@ -96,22 +96,26 @@ let app = {
                 let infos = '';
                 let mandatoryPorts = 0;
                 // Checking if mandatoryPorts 22 & 25 are opened
-                console.log(response['ports'])
-                if ((jQuery.inArray("22", response['ports'])) && (response['ports'][22] == 'up')) {
-                    mandatoryPorts += 1;
-                    infos += 'Port 22 is open<br>';
+                //console.log(response)
+                for (var i = 0; i < response['ports'].length; i++) 
+                {
+                    console.log(response['ports'][i]);
+                    if ((jQuery.inArray("22", response['ports'][i])) && (response['ports'][22] == 'up')) {
+                        mandatoryPorts += 1;
+                        infos += 'Port 22 is open<br>';
+                    }
+                    if ((jQuery.inArray("25", response['ports'][i])) && (response['ports'][25] == 'up')) {
+                        mandatoryPorts += 1;
+                        infos += 'Port 25 is open<br>';
+                    }
+                    // Checking all other ports opened
+                    $.each(response['ports'][i], function( index, value ){
+                        if (value === 'up')
+                        {
+                            total += 1;
+                        }                      
+                    });
                 }
-                if ((jQuery.inArray("25", response['ports'])) && (response['ports'][25] == 'up')) {
-                    mandatoryPorts += 1;
-                    infos += 'Port 25 is open<br>';
-                }
-                // Checking all other ports opened
-                $.each(response['ports'], function( index, value ){
-                    if (value === 'up')
-                    {
-                        total += 1;
-                    }                      
-                });
                 // Case : Server is up, 2 ports opened but not all mandatoryPorts
                 if (mandatoryPorts != 2 && total == 2 && response['status'] != 'down') {
                     element = $('tr[server-id="'+ response['id'] + '"]');

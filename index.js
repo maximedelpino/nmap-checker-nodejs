@@ -25,18 +25,30 @@ app.post('/checkPorts', (req, res) => {
     const opts = {
         range: [serverIP]
       };
-      
+
+      let status = "up";
+      let portsData = new Array();
       
       nmap.scan(opts, function(err, report) {
         if (err) throw new Error(err);
       
         for (let item in report) {
-          console.log(JSON.stringify(report[item], null, 2));
+          let data = report[item].host[0].ports[0].port;
+          
+          data.forEach(function(element) {
+            let portid = element.item.portid;
+            let Obj = { [portid]: "up"}
+            portsData.push(Obj);
+          });
+
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ 
+            'id' : serverID,
+            'status' : status,
+            'ports' : portsData,
+            }));
         }
       });
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ id: serverID }));
   });
   
 app.listen(3000,() => {
