@@ -1,0 +1,14 @@
+{
+  "name": "shredder-list-checker",
+  "version": "1.0.0",
+  "description": "Shredder list checker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maxime Del Pino",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0"
+  }
+}

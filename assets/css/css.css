@@ -1,0 +1,145 @@
+.shredder-list {
+    width: 100%;
+}
+
+.list {
+    width: 100%;
+    height: 100%;
+    overflow-x: scroll;
+}
+
+.section {
+    max-width: 1300px;
+    margin: 0 auto 0 auto;
+}
+
+.title {
+    font-family: Syncopate;
+    font-size: 28px;
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 1rem !important;
+    padding-bottom: 1rem;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+/*::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}*/
+
+.is-vcentered {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.no-border {
+    border: none !important;
+}
+
+td {
+    text-align: center;
+}
+
+.d-none {
+    display: none;
+}
+
+.padding-top {
+    padding-top: 1rem !important;
+}
+
+.tooltip {
+    display:inline-block;
+    position:relative;
+    border-bottom:1px dotted #666;
+    text-align:left;
+}
+
+.tooltip .top {
+    min-width:200px; 
+    top: 0px;
+    right: -85px;
+    transform:translate(-50%, -100%);
+    padding:10px 20px;
+    color:#111111;
+    background-color:#EEEEEE;
+    font-weight:normal;
+    font-size:13px;
+    border-radius:8px;
+    position:absolute;
+    z-index:99999999;
+    box-sizing:border-box;
+    box-shadow:0 1px 8px rgba(0,0,0,0.5);
+    display:none;
+    overflow: auto;
+}
+
+.tooltip:hover .top {
+    display:block;
+    position: absolute;
+    z-index: 99999;
+}
+
+.tooltip .top i {
+    position:absolute;
+    top:100%;
+    left:50%;
+    margin-left:-15px;
+    width:30px;
+    height:15px;
+    overflow:hidden;
+}
+
+.tooltip .top i::after {
+    content:'';
+    position:absolute;
+    width:15px;
+    height:15px;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(45deg);
+    background-color:#EEEEEE;
+    box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
+
+a {
+    color: white !important;
+}
+
+html {
+    background-color: #537895;
+    background-image: linear-gradient(315deg, #537895 0%, #09203f 74%);
+    height: 100vh;
+}
+
+thead {
+    background-color: black !important;
+    border: 1px solid white;
+}
+
+abbr {
+    color: white !important;
+}
+
+p {
+    color: white;
+}
+
+tr {
+    background-color: black;
+    color: white;
+}
+
+.color-b {
+    color: black !important;
+}
+
+.t {
+    background-color: transparent !important;
+}
+
+body {
+    color: lightgrey;
+}
