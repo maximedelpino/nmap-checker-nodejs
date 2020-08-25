@@ -24,58 +24,59 @@ app.post('/checkPorts', (req, res) => {
     let boolPing;
     let portsData = new Array();
 
-    console.log(serverIP)
+    if (isIp(serverIP))
+    {
 
-    var hosts = [serverIP];
-    hosts.forEach(function(host){
-      ping.sys.probe(host, function(isAlive){
-          boolPing = isAlive ? true : false;
+      var hosts = [serverIP];
+      hosts.forEach(function(host){
+        ping.sys.probe(host, function(isAlive){
+            boolPing = isAlive ? true : false;
 
-          if (boolPing) {
+            if (boolPing) {
 
-            let status = "up";
-      
-            var quickscan = new nmap.NmapScan(serverIP);
-       
-            quickscan.on('complete', function(data){
-      
-              data[0].openPorts.forEach(pushPortsToArray);
-      
-              function pushPortsToArray(item, index) {
-                let Obj = { [item.port]: "up"};
-                portsData.push(Obj);
-              }
-      
+              let status = "up";
+        
+              var quickscan = new nmap.NmapScan(serverIP);
+        
+              quickscan.on('complete', function(data){
+        
+                data[0].openPorts.forEach(pushPortsToArray);
+        
+                function pushPortsToArray(item, index) {
+                  let Obj = { [item.port]: "up"};
+                  portsData.push(Obj);
+                }
+        
+                res.setHeader('Content-Type', 'application/json');
+                  res.send(JSON.stringify({ 
+                    'id' : serverID,
+                    'status' : status,
+                    'ports' : portsData,
+                    }));
+              });
+              
+              quickscan.on('error', function(error){
+                console.log(error);
+              });
+        
+              quickscan.startScan();
+        
+            }
+            else {
+        
+              let status = "down";
+              let Obj = { 22: "down", 25: "down" };
+              portsData.push(Obj);
               res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify({ 
-                  'id' : serverID,
-                  'status' : status,
-                  'ports' : portsData,
-                  }));
-            });
-            
-            quickscan.on('error', function(error){
-              console.log(error);
-            });
-       
-            quickscan.startScan();
-      
-          }
-          else {
-      
-            let status = "down";
-            let Obj = { 22: "down", 25: "down" };
-            portsData.push(Obj);
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ 
-              'id' : serverID,
-              'status' : status,
-              'ports' : portsData,
-              }));
-          }
-          console.log(boolPing);
+              res.send(JSON.stringify({ 
+                'id' : serverID,
+                'status' : status,
+                'ports' : portsData,
+                }));
+            }
+        });
       });
-    });
+    }
   });
   
 app.listen(3000,() => {
