@@ -2,8 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const app = express();
-//const nmap = require('node-nmap');
-const nmap = require('libnmap');
+const nmap = require('node-nmap');
+const isIp = require('is-ip');
+var ping = require('ping');
+//const nmap = require('libnmap');
 nmap.nmapLocation = 'nmap'; //default
 var application_root = __dirname;
 
@@ -19,36 +21,61 @@ app.post('/checkPorts', (req, res) => {
     
     var serverID=req.body.id;
     var serverIP=req.body.ip;
+    let boolPing;
+    let portsData = new Array();
 
     console.log(serverIP)
 
-    const opts = {
-        range: [serverIP]
-      };
+    var hosts = [serverIP];
+    hosts.forEach(function(host){
+      ping.sys.probe(host, function(isAlive){
+          boolPing = isAlive ? true : false;
 
-      let status = "up";
-      let portsData = new Array();
+          if (boolPing) {
+
+            let status = "up";
       
-      nmap.scan(opts, function(err, report) {
-        if (err) throw new Error(err);
+            var quickscan = new nmap.NmapScan(serverIP);
+       
+            quickscan.on('complete', function(data){
       
-        for (let item in report) {
-          let data = report[item].host[0].ports[0].port;
-          
-          data.forEach(function(element) {
-            let portid = element.item.portid;
-            let Obj = { [portid]: "up"}
+              data[0].openPorts.forEach(pushPortsToArray);
+      
+              function pushPortsToArray(item, index) {
+                let Obj = { [item.port]: "up"};
+                portsData.push(Obj);
+              }
+      
+              res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({ 
+                  'id' : serverID,
+                  'status' : status,
+                  'ports' : portsData,
+                  }));
+            });
+            
+            quickscan.on('error', function(error){
+              console.log(error);
+            });
+       
+            quickscan.startScan();
+      
+          }
+          else {
+      
+            let status = "down";
+            let Obj = { 22: "down", 25: "down" };
             portsData.push(Obj);
-          });
-
-          res.setHeader('Content-Type', 'application/json');
-          res.send(JSON.stringify({ 
-            'id' : serverID,
-            'status' : status,
-            'ports' : portsData,
-            }));
-        }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ 
+              'id' : serverID,
+              'status' : status,
+              'ports' : portsData,
+              }));
+          }
+          console.log(boolPing);
       });
+    });
   });
   
 app.listen(3000,() => {
