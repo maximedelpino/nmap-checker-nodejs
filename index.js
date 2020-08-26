@@ -13,10 +13,14 @@ app.use(express.static(application_root));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+/* Router */
+
+/* Route ('/'), methods='GET' */
 app.get('/',(req, res) => {
     res.sendfile("index.html");
   });
 
+  /* Route ('/checkPorts'), methods='POST' */
 app.post('/checkPorts', (req, res) => {
     
     var serverID=req.body.id;
