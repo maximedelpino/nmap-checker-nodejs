@@ -65,7 +65,6 @@ let app = {
             if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                console.log(e);
                 app.rows = e.target.result.split("\n");
                 app.method = 'readCsvEvent';
                 app.regex = /"/g;
@@ -96,10 +95,8 @@ let app = {
                 let infos = '';
                 let mandatoryPorts = 0;
                 // Checking if mandatoryPorts 22 & 25 are opened
-                //console.log(response)
                 for (var i = 0; i < response['ports'].length; i++) 
                 {
-                    console.log(response['ports'][i]);
                     if ((jQuery.inArray("22", response['ports'][i])) && (response['ports'][22] == 'up')) {
                         mandatoryPorts += 1;
                         infos += 'Port 22 is open<br>';
