@@ -108,9 +108,11 @@ a {
     color: white !important;
 }
 
-html {
+body {
     background-color: #537895;
     background-image: linear-gradient(315deg, #537895 0%, #09203f 74%);
+    height: 100%;
+    min-height: 100vh;
 }
 
 thead {
