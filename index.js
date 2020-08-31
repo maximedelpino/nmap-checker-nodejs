@@ -20,7 +20,7 @@ app.get('/',(req, res) => {
     res.sendfile("index.html");
   });
 
-  /* Route ('/checkPorts'), methods='POST' */
+/* Route ('/checkPorts'), methods='POST' */
 app.post('/checkPorts', (req, res) => {
     
     var serverID=req.body.id;

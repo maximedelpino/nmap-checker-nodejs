@@ -292,7 +292,7 @@ let app = {
                 // Adding the table only one time
                 if (boolTable) {
                         $('.list').html(
-                            '<div class="column is-full">'
+                            '<div class="column overflow is-full">'
                         +    '<table class="table is-scrollable shredder-list is-stripped has-text-centered">'
                         +     '<thead>'
                         +      '<tr>'
