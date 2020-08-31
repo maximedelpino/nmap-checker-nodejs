@@ -1,5 +1,5 @@
 let app = {
-    apiUrl: location.pathname,
+    apiUrl: 'http://10.81.5.72:3000',
 
     init: function() {
         console.log('init');

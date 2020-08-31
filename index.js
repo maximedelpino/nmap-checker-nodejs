@@ -22,7 +22,7 @@ app.get('/',(req, res) => {
 
 /* Route ('/checkPorts'), methods='POST' */
 app.post('/checkPorts', (req, res) => {
-    
+    res.setHeader('Access-Control-Allow-origin', '*');
     var serverID=req.body.id;
     var serverIP=req.body.ip;
     let boolPing;
