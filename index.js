@@ -40,7 +40,7 @@ app.post('/checkPorts', (req, res) => {
 
               let status = "up";
         
-              var quickscan = new nmap.NmapScan(serverIP);
+              var quickscan = new nmap.NmapScan(serverIP, '-F');
         
               quickscan.on('complete', function(data){
         

@@ -25,10 +25,10 @@
     text-decoration: underline;
 }
 
-/*::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0px;
     background: transparent;
-}*/
+}
 
 .is-vcentered {
     display: inline-block;
