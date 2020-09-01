@@ -97,20 +97,18 @@ let app = {
                 // Checking if mandatoryPorts 22 & 25 are opened
                 for (var i = 0; i < response['ports'].length; i++) 
                 {
-                    if ((jQuery.inArray("22", response['ports'][i])) && (response['ports'][22] == 'up')) {
-                        mandatoryPorts += 1;
-                        infos += 'Port 22 is open<br>';
-                    }
-                    if ((jQuery.inArray("25", response['ports'][i])) && (response['ports'][25] == 'up')) {
-                        mandatoryPorts += 1;
-                        infos += 'Port 25 is open<br>';
-                    }
-                    // Checking all other ports opened
+                    // Checking all ports opened
                     $.each(response['ports'][i], function( index, value ){
+                        console.log(response['ports'][i]);
                         if (value === 'up')
                         {
                             total += 1;
-                        }                      
+                        }    
+
+                        if (((index == 22) || (index == 25) && value == 'up')) 
+                        {
+                            mandatoryPorts += 1;
+                        }                  
                     });
                 }
                 // Case : Server is up, 2 ports opened but not all mandatoryPorts
@@ -128,7 +126,7 @@ let app = {
                     + '</div>');
                 }
                 // Case : Server is up but not all mandatoryPorts are opened or less/more ports are opened
-                 else if (mandatoryPorts != 2 && response['status'] != 'down') {
+                 else if (( mandatoryPorts != 2 && total != 2 || mandatoryPorts == 2 && total != 2) && response['status'] != 'down') {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-warning');
                     element.addClass('color-b');
@@ -142,7 +140,7 @@ let app = {
                     + '</div>');
                 }
                 // Case : Server is up and only mandatoryPorts are opened
-                else if (total == 2 && (jQuery.inArray("22", response['ports'] && jQuery.inArray("25", response['ports']))))
+                else if (total == 2 && mandatoryPorts == 2)
                 {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-success');
@@ -150,7 +148,7 @@ let app = {
                     element.find('.status').html('RUNNING (2/2)');
                 }
                 // Case : Server doesn't answer to ping
-                else {
+                else if (response['status'] == 'down') {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-danger');
                     element.addClass('color-b');
