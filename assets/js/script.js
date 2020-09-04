@@ -164,7 +164,17 @@ let app = {
             }
             ).fail(
             function() {
-                console.log('Ajax request failed')
+                element = $('tr[server-id="'+ app.serverID '"]');
+                    element.addClass('has-background-warning');
+                    element.addClass('color-b');
+                    element.find('.status').html('CHECK';
+                    + '<div class="tooltip ml-1">'
+                    +    '<i class="fas fa-question-circle"></i>'
+                    +   '<div class="top">'
+                    +    '<h3>Nmap timeout, server has no ports opened or is blocking us'
+                    +    '</h3>'
+                    +   '</div>' 
+                    + '</div>');
             }
             );
     },
