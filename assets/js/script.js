@@ -327,7 +327,7 @@ let app = {
         });
         roomList.sort();
 
-        roomList.each(function( element ) { 
+      roomList.each(function( element ) { 
             if (element == 'VDS') {
                 room = '';
             }
@@ -349,7 +349,7 @@ let app = {
             +       '<th><abbr title="Status">Status</abbr></th>'
             +      '</tr>'
             +     '</thead>')    
-        );
+        });
 
         // Preapare rows & Ajax requests
         for (let i=0; i < serverList.length; ++i) {
