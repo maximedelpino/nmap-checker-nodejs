@@ -1,5 +1,7 @@
 let app = {
-    apiUrl: 'http://10.81.5.72:3000',
+    //apiUrl: 'http://10.81.5.72:3000/',
+    apiUrl: 'http://localhost:3000/',
+
 
     init: function() {
         console.log('init');
@@ -77,7 +79,7 @@ let app = {
             }
         }
     },
-    // Sending request to the backend (/CheckPorts)
+    // Sending request to the backend : POST request -> (/CheckPorts)
     sendAjaxRequest : function() {
         $.ajax(
             {
@@ -99,7 +101,7 @@ let app = {
                 {
                     // Checking all ports opened
                     $.each(response['ports'][i], function( index, value ){
-                        console.log(response['ports'][i]);
+                       
                         if (value === 'up')
                         {
                             total += 1;
@@ -152,7 +154,7 @@ let app = {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-danger');
                     element.addClass('color-b');
-                    element.find('.status').html('DOWN (' + total + '/2)'
+                    element.find('.status').html('DOWN'
                     + '<div class="tooltip ml-1">'
                     +    '<i class="fas fa-question-circle"></i>'
                     +   '<div class="top">'
@@ -164,17 +166,7 @@ let app = {
             }
             ).fail(
             function() {
-                element = $('tr[server-id="'+ app.serverID '"]');
-                    element.addClass('has-background-warning');
-                    element.addClass('color-b');
-                    element.find('.status').html('CHECK';
-                    + '<div class="tooltip ml-1">'
-                    +    '<i class="fas fa-question-circle"></i>'
-                    +   '<div class="top">'
-                    +    '<h3>Nmap timeout, server has no ports opened or is blocking us'
-                    +    '</h3>'
-                    +   '</div>' 
-                    + '</div>');
+                
             }
             );
     },
@@ -259,9 +251,9 @@ let app = {
     // Process all valid IP addresses and display results in the page
     addTableToDOM : function() {
         let serverList = [];
+        let roomList = [];
         let id = 0;
         let errors = '';
-        let boolTable = true;
         // Cleaning and splitting the rows providing from textarea
         for (i = 0; i < (app.rows).length; i++) {
             if (app.method == 'checkTextareaEvent') {
@@ -297,33 +289,66 @@ let app = {
                 if (app.currentTarget != undefined) {
                 (app.currentTarget).addClass('is-loading');
                 }
-                // Adding the table only one time
-                if (boolTable) {
-                        $('.list').html(
-                            '<div class="column overflow is-full">'
-                        +    '<table class="table is-scrollable shredder-list is-stripped has-text-centered">'
-                        +     '<thead>'
-                        +      '<tr>'
-                        +       '<th><abbr title="Server name">Server name</abbr></th>'
-                        +       '<th><abbr title="Template">Template</abbr></th>'
-                        +       '<th><abbr title="Location">Location</abbr></th>'
-                        +       '<th><abbr title="Switch/Port">Switch/Port</abbr></th>'
-                        +       '<th><abbr title="Main IP Net">Main IP Net</abbr></th>'
-                        +       '<th><abbr title="Main IP">Main IP</abbr></th>'
-                        +       '<th><abbr title="Status">Status</abbr></th>'
-                        +      '</tr>'
-                        +     '</thead>');
+                
+                // Checking the room from the current row
+                let room = app.cells[2];
+                room = room.split('/');
+                room = room[2] + '.' + room[3];
 
-                    boolTable = false;
+                // Check if the room already exist in the array
+                let roomExist = roomList.find(function (element) {
+                    return element == room;
+                });
+
+                if (roomExist == undefined) {
+                    roomList.push(room);
                 }
 
-                serverList.push(app.cells);
+                serverList.push(app.cells);    
+            }
+
+            app.serverList = serverList;
+
+            if (checkIP != true && app.cells.length > 1 && app.method != 'readCsvEvent') {
+                errors += "Invalid IP address line "+ i + '<br>';
+            }
+        }
+
+        // Creating the tables in DOM
+        $('.list').html('');
+        roomList.sort();
+
+        roomList.forEach(element => 
+            $('.list').append(
+                '<div class="column processing overflow is-full" room="' + element + '">'
+            +    '<div class="is-size-4">Room ' + element + '</div>'
+            +    '<table room="' + element + '" class="table is-scrollable shredder-list is-stripped has-text-centered">'
+            +     '<thead>'
+            +      '<tr>'
+            +       '<th><abbr title="Server name">Server name</abbr></th>'
+            +       '<th><abbr title="Template">Template</abbr></th>'
+            +       '<th><abbr title="Location">Location</abbr></th>'
+            +       '<th><abbr title="Switch/Port">Switch/Port</abbr></th>'
+            +       '<th><abbr title="Main IP Net">Main IP Net</abbr></th>'
+            +       '<th><abbr title="Main IP">Main IP</abbr></th>'
+            +       '<th><abbr title="Status">Status</abbr></th>'
+            +      '</tr>'
+            +     '</thead>')    
+        );
+
+        // Preapare rows & Ajax requests
+        for (let i=0; i < serverList.length; ++i) {
+                let room = serverList[i][2];
+                room = room.split('/');
+                room = room[2] + '.' + room[3];
+
                 app.serverID = parseInt(id) + 1;
+                app.serverIP = serverList[i][5];
                 id = parseInt(id) + 1;
-                let row = '<tr server-id="'+ app.serverID +'">';
+                let row = '<tr server-id="'+ app.serverID + '">';
 
                 for (var j = 0; j < 6; j++) {
-                    row += ('<td>' + app.cells[j] + '</td>');
+                    row += ('<td>' + serverList[i][j] + '</td>');
                 }
                 row += (
                         '<td class="status">'
@@ -331,15 +356,16 @@ let app = {
                     +   '</td>'
                     +  '</tr>');
 
-                $('.table').append(row);
-                app.sendAjaxRequest();
-            }
-            app.serverList = serverList;
+                element = $('table[room="'+ room + '"]');
 
-            if (checkIP != true && app.cells.length > 1 && app.method != 'readCsvEvent') {
-                errors += "Invalid IP address line "+ i + '<br>';
-            }
+                $(element).append(row);
+                app.sendAjaxRequest();
         }
+
+        // Sort table
+        (function ( $ ) {
+            $( 'table[room="3.1"]' ).TableSorter();
+        } ( jQuery ));
 
         if (errors.length > 0) {
             $.growl.warning({ message: errors });

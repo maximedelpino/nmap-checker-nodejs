@@ -43,8 +43,14 @@ app.post('/checkPorts', (req, res) => {
               var quickscan = new nmap.NmapScan(serverIP, '-F');
         
               quickscan.on('complete', function(data){
-        
-                data[0].openPorts.forEach(pushPortsToArray);
+
+                if (data[0] != undefined) {
+                  data[0].openPorts.forEach(pushPortsToArray);
+                }
+                else {
+                  let Obj = { 22: "down", 25: "down" };
+                  portsData.push(Obj);
+                }
         
                 function pushPortsToArray(item, index) {
                   let Obj = { [item.port]: "up"};
