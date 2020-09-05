@@ -294,6 +294,11 @@ let app = {
                 let room = app.cells[2];
                 room = room.split('/');
                 room = room[2] + '.' + room[3];
+                
+                let checkV = room.split('.');
+                if (checkV[0] == 'V') {
+                    room = 'VDS';
+                }
 
                 // Check if the room already exist in the array
                 let roomExist = roomList.find(function (element) {
@@ -322,10 +327,16 @@ let app = {
         });
         roomList.sort();
 
-        roomList.forEach(element => 
+        roomList.each(function( element ) { 
+            if (element == 'VDS') {
+                room = '';
+            }
+            else {
+                room = 'Room';
+            }
             $('.list').append(
                 '<div class="column processing overflow is-full" room="' + element + '">'
-            +    '<div class="is-size-4">Room ' + element + '</div>'
+            +    '<div class="is-size-4">'room + element + '</div>'
             +    '<table room="' + element + '" class="table is-scrollable shredder-list is-stripped has-text-centered">'
             +     '<thead>'
             +      '<tr>'
@@ -345,6 +356,11 @@ let app = {
                 let room = serverList[i][2];
                 room = room.split('/');
                 room = room[2] + '.' + room[3];
+            
+                let checkV = room.split('.');
+                if (checkV[0] == 'V') {
+                    room = 'VDS';
+                }
 
                 app.serverID = parseInt(id) + 1;
                 app.serverIP = serverList[i][5];
