@@ -327,17 +327,18 @@ let app = {
         });
         roomList.sort();
 
-      roomList.each(function( element ) { 
-            if (element == 'VDS') {
+        $.each( roomList, function( key, value ) { 
+            if (value == 'VDS') {
                 room = '';
             }
             else {
-                room = 'Room';
+                room = 'Room ';
             }
+
             $('.list').append(
-                '<div class="column processing overflow is-full" room="' + element + '">'
-            +    '<div class="is-size-4">'room + element + '</div>'
-            +    '<table room="' + element + '" class="table is-scrollable shredder-list is-stripped has-text-centered">'
+                '<div class="column processing overflow is-full" room="' + value + '">'
+            +    '<div class="is-size-4">' + room + value + '</div>'
+            +    '<table room="' + value + '" class="table is-scrollable shredder-list is-stripped has-text-centered">'
             +     '<thead>'
             +      '<tr>'
             +       '<th><abbr title="Server name">Server name</abbr></th>'
