@@ -44,12 +44,12 @@ app.post('/checkPorts', (req, res) => {
         
               quickscan.on('complete', function(data){
 
-                if (data[0] != undefined) {
-                  data[0].openPorts.forEach(pushPortsToArray);
-                }
-                else {
+                if (data[0].openPorts == null) {
                   let Obj = { 22: "down", 25: "down" };
                   portsData.push(Obj);
+                }
+                else {
+                  data[0].openPorts.forEach(pushPortsToArray);
                 }
         
                 function pushPortsToArray(item, index) {
