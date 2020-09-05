@@ -316,6 +316,10 @@ let app = {
 
         // Creating the tables in DOM
         $('.list').html('');
+        // Sorting tables
+        serverList.sort(function(a,b) {
+            return a[2] > b[2] ? 1 : -1;
+        });
         roomList.sort();
 
         roomList.forEach(element => 
@@ -361,11 +365,6 @@ let app = {
                 $(element).append(row);
                 app.sendAjaxRequest();
         }
-
-        // Sort table
-        (function ( $ ) {
-            $( 'table[room="3.1"]' ).TableSorter();
-        } ( jQuery ));
 
         if (errors.length > 0) {
             $.growl.warning({ message: errors });
