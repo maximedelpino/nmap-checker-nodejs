@@ -118,7 +118,7 @@ let app = {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-warning');
                     element.addClass('color-b');
-                    element.find('.status').html('CHECK (' + total + ')' 
+                    element.find('.status').html('toCheck (' + total + ')' 
                     + '<div class="tooltip ml-1">'
                     +    '<i class="fas fa-question-circle"></i>'
                     +   '<div class="top">'
@@ -132,7 +132,7 @@ let app = {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-warning');
                     element.addClass('color-b');
-                    element.find('.status').html('CHECK (' + total + '/2)' 
+                    element.find('.status').html('toCheck (' + total + '/2)' 
                     + '<div class="tooltip ml-1">'
                     +    '<i class="fas fa-question-circle"></i>'
                     +   '<div class="top">'
@@ -147,7 +147,7 @@ let app = {
                     element = $('tr[server-id="'+ response['id'] + '"]');
                     element.addClass('has-background-success');
                     element.addClass('color-b');
-                    element.find('.status').html('RUNNING (2/2)');
+                    element.find('.status').html('OK');
                 }
                 // Case : Server doesn't answer to ping
                 else if (response['status'] == 'down') {
