@@ -254,14 +254,14 @@ let app = {
         let roomList = [];
         let id = 0;
         let errors = '';
-        // Cleaning and splitting the rows providing from textarea
+        // Cleaning and splitting the rows provided from textarea
         for (i = 0; i < (app.rows).length; i++) {
             if (app.method == 'checkTextareaEvent') {
                 app.rows[i] = app.rows[i].replace("ui-button", "");
                 app.cells = app.rows[i].split('\t');
                 app.location = app.cells[2];
             }
-            // Split the rows providing from the csv file
+            // Split the rows provided from the csv file
             else if (app.method == 'readCsvEvent') {
                 app.cells = app.rows[i].split(",");
 
@@ -282,10 +282,11 @@ let app = {
             }
 
             app.serverIP = app.cells[5];
-            // Checking if IP is valid (also checked in the backend)
+            // Checking if serverIP is valid (also checked in the backend)
             let checkIP = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(app.serverIP);
 
-            if (app.cells.length > 1 && checkIP == true && app.location[0] == 'SXB') {
+            //if (app.cells.length > 1 && checkIP == true && app.location[0] == 'SXB') {
+            if (app.cells.length > 1 && checkIP == true) {
                 if (app.currentTarget != undefined) {
                 (app.currentTarget).addClass('is-loading');
                 }
@@ -352,7 +353,7 @@ let app = {
             +     '</thead>')    
         });
 
-        // Preapare rows & Ajax requests
+        // Prepare rows & Ajax requests
         for (let i=0; i < serverList.length; ++i) {
                 let room = serverList[i][2];
                 room = room.split('/');
